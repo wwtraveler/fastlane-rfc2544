@@ -1,0 +1,24 @@
+[package]
+name = "fastlane-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+readme = "../../README.md"
+description = "Core RFC 2544 test engine — throughput, latency, frame loss, back-to-back"
+
+[dependencies]
+fastlane-payload = { path = "../fastlane-payload" }
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+log = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+[[bin]]
+name = "fastlane-core-lib"
+path = "src/lib.rs"
