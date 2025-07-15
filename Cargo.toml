@@ -15,9 +15,9 @@ resolver = "2"
 version = "1.0.0"
 edition = "2021"
 rust-version = "1.75"
-authors = ["t2fn <t2fn@users.noreply.github.com>"]
+authors = ["wwtraveler <wwtraveler@users.noreply.github.com>"]
 license = "MIT"
-repository = "https://github.com/t2fn/fastlane-rfc2544"
+repository = "https://github.com/wwtraveler/fastlane-rfc2544"
 readme = "README.md"
 description = "Blazing-fast RFC 2544 network benchmarking for modern high-speed interfaces"
 

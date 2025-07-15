@@ -1,0 +1,126 @@
+# fastlane-rfc2544 configuration example
+# Full configuration with all supported options
+
+# Network interface
+interface: eth0
+
+# Line rate (0 = auto-detect)
+line_rate_mbps: 0
+auto_detect_nic: true
+
+# Test type (throughput | latency | frame_loss | back_to_back | all)
+test_type: throughput
+
+# Frame sizes (0 = all standard: 64, 128, 256, 512, 1024, 1280, 1518)
+frame_sizes: [64, 128, 256, 512, 1024, 1280, 1518]
+include_jumbo: false
+
+# Timing
+trial_duration: 60s
+warmup_period: 2s
+
+# Throughput (RFC 2544 §26.1)
+throughput:
+  initial_rate_pct: 100.0
+  resolution_pct: 0.1
+  max_iterations: 25
+  tolerated_frame_loss: 0.001
+
+# Latency (RFC 2544 §26.2)
+latency:
+  samples: 1000
+  load_levels: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+  rate_limit: 0.001
+
+# Frame loss (RFC 2544 §26.3)
+frame_loss:
+  start_pct: 100.0
+  end_pct: 10.0
+  step_pct: 10.0
+
+# Back-to-back (RFC 2544 §26.4)
+back_to_back:
+  initial_burst: 1000
+  trials: 50
+
+# Packet generation
+udp_src_port: 42
+udp_dst_port: 42
+payload_pattern: 15
+
+# Platform
+hw_timestamp: true
+use_pacing: true
+batch_size: 32
+num_queues: 1
+rate_type: cbr
+verbose: false
+
+# Output
+output_format: text
+# output_path: /path/to/results
+
+# Y.1564 EtherSAM
+y1564:
+  services:
+    - service_id: 1
+      service_name: "default-service"
+      cir_mbps: 100.0
+      eir_mbps: 0.0
+      cos: 0
+      enabled: true
+  config_steps: [25, 50, 75, 100]
+  step_duration: 60s
+  perf_duration: 15m
+  run_config_test: true
+  run_perf_test: true
+
+# RFC 2889
+rfc2889:
+  port_count: 2
+  address_count: 8192
+  trial_duration: 60s
+  acceptable_loss_pct: 0.0
+
+# RFC 6349
+rfc6349:
+  target_rate_mbps: 0.0
+  mss: 1460
+  rwnd: 65535
+  test_duration: 30s
+  parallel_streams: 1
+
+# Y.1731
+y1731:
+  mep_id: 1
+  meg_level: 4
+  meg_id: "DEFAULT-MEG"
+  ccm_interval: 1000
+  probe_count: 100
+  probe_interval: 1s
+
+# MEF
+mef:
+  cir_mbps: 100.0
+  eir_mbps: 0.0
+  cbs_bytes: 12000
+  ebs_bytes: 0
+  flr_threshold_pct: 0.01
+  avail_threshold_pct: 99.99
+
+# TSN
+tsn:
+  num_classes: 8
+  cycle_time_ns: 1000000
+  max_latency_ns: 100000
+  max_jitter_ns: 10000
+  test_duration: 60s
+  frame_size: 128
+
+# IMIX
+imix:
+  count: 1000
+
+# Port config
+tx_port: 0
+rx_port: 0

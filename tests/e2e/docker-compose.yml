@@ -1,0 +1,58 @@
+version: "3.8"
+# End-to-end docker-compose for fastlane-rfc2544
+# Runs two containers (tester + reflector) connected via a bridge network.
+# The tester sends RFC 2544 test packets, the reflector echoes them back.
+
+services:
+  tester:
+    build:
+      context: ../../
+      dockerfile: Dockerfile
+    container_name: fastlane-tester
+    network_mode: service:reflector
+    command: [
+      "eth0",
+      "--test", "throughput",
+      "--duration", "30",
+      "--size", "64,128,256,512,1024,1280,1518",
+      "--jumbo",
+      "--num-queues", "4",
+      "--rate-type", "cbr",
+      "--resolution", "0.5",
+      "--max-iter", "20",
+      "--loss-tolerance", "0.01",
+      "--output", "json",
+      "--verbose"
+    ]
+    depends_on:
+      - reflector
+    volumes:
+      - results:/fastlane/reports
+
+  reflector:
+    image: node:18-slim
+    container_name: fastlane-reflector
+    command: >
+      sh -c "
+        apt-get update && apt-get install -y iproute2 ethtool &&
+        npm install -g http-server &&
+        http-server -p 42 --cors &
+        # Simulate RFC2544 reflector (UDP echo on port 42)
+        while true; do
+          echo 'reflector ready' | nc -ul -p 42 > /dev/null 2>&1 || true
+        done
+      "
+    networks:
+      fastlane_net:
+        ipv4_address: 172.28.1.2
+
+networks:
+  fastlane_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+          gateway: 172.28.1.1
+
+volumes:
+  results:

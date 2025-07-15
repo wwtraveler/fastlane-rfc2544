@@ -1,0 +1,71 @@
+{
+  "interface": "eth0",
+  "line_rate_mbps": 400000,
+  "auto_detect_nic": true,
+  "test_type": "throughput",
+  "frame_sizes": [64, 128, 256, 512, 1024, 1280, 1518],
+  "include_jumbo": true,
+  "trial_duration": "60s",
+  "warmup_period": "2s",
+  "throughput": {
+    "initial_rate_pct": 100.0,
+    "resolution_pct": 0.1,
+    "max_iterations": 25,
+    "tolerated_frame_loss": 0.001
+  },
+  "latency": {
+    "samples": 1000,
+    "load_levels": [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+    "rate_limit": 0.001
+  },
+  "frame_loss": {
+    "start_pct": 100.0,
+    "end_pct": 10.0,
+    "step_pct": 10.0
+  },
+  "back_to_back": {
+    "initial_burst": 1000,
+    "trials": 50
+  },
+  "udp_src_port": 42,
+  "udp_dst_port": 42,
+  "payload_pattern": 15,
+  "hw_timestamp": true,
+  "use_pacing": true,
+  "batch_size": 32,
+  "num_queues": 8,
+  "rate_type": "cbr",
+  "verbose": true,
+  "output_format": "json",
+  "y1564": {
+    "services": [],
+    "config_steps": [25, 50, 75, 100],
+    "step_duration": "60s",
+    "perf_duration": "15m"
+  },
+  "rfc2889": {
+    "port_count": 2,
+    "address_count": 8192,
+    "trial_duration": "60s"
+  },
+  "rfc6349": {
+    "mss": 1460,
+    "rwnd": 65535,
+    "parallel_streams": 1
+  },
+  "y1731": {
+    "mep_id": 1,
+    "meg_level": 4
+  },
+  "mef": {
+    "cir_mbps": 100.0,
+    "eir_mbps": 0.0
+  },
+  "tsn": {
+    "num_classes": 8,
+    "cycle_time_ns": 1000000
+  },
+  "imix": {
+    "count": 1000
+  }
+}
