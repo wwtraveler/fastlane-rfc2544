@@ -6,7 +6,7 @@
 use std::time::Duration;
 
 use crate::config::{Config, FrameLossConfig, TestType};
-use crate::results::{FrameLossResult, FrameLossTrial, FrameLossTestResult};
+pub use crate::results::{FrameLossResult, FrameLossTrial, FrameLossTestResult};
 
 /// Run frame loss test at a single frame size
 pub fn run_frameloss_trial(
@@ -29,12 +29,16 @@ pub fn run_frameloss_trial(
         let frameloss_pct = (tx as f64 - rx as f64) / (tx as f64) * 100.0;
 
         let trial = FrameLossTrial {
+            load_pct: rate_multi * 100.0,
             rate_percent: rate_multi * 100.0,
             frame_size,
-            duration: trial_duration,
-            rx_packets: rx,
+            sent: tx,
+            received: rx,
+            lost: tx - rx,
             tx_packets: tx,
+            rx_packets: rx,
             frameloss_pct,
+            duration: trial_duration,
         };
         results.push(trial);
 
@@ -66,13 +70,33 @@ pub fn run_frameloss_full(
             |rate, dur| tx_fn(*frame_size, rate, dur),
         )?;
 
+        let sent: u64 = frame_results.iter().map(|t| t.sent).sum();
+        let received: u64 = frame_results.iter().map(|t| t.received).sum();
+        let loss_pct = if sent > 0 {
+            (sent as f64 - received as f64) / sent as f64 * 100.0
+        } else {
+            0.0
+        };
         all_results.push(FrameLossResult {
             frame_size: *frame_size,
+            sent,
+            received,
+            loss_pct,
             trials: frame_results,
         });
     }
 
+    let loss_threshold = 1.0; // 1% frame loss threshold as default
+    let result = all_results.last().cloned().unwrap_or(FrameLossResult {
+        frame_size: 0,
+        sent: 0,
+        received: 0,
+        loss_pct: 0.0,
+        trials: vec![],
+    });
     Ok(FrameLossTestResult {
+        result,
+        loss_threshold,
         results: all_results,
         test_duration: trial_duration * frame_sizes.len() as u32,
         test_type: TestType::FrameLoss,
@@ -100,12 +124,16 @@ pub fn run_frameloss_ratio(
         let frameloss_pct = (tx as f64 - rx as f64) / (tx as f64) * 100.0;
 
         let trial = FrameLossTrial {
+            load_pct: rate_multi * 100.0,
             rate_percent: rate_multi * 100.0,
             frame_size,
-            duration: trial_duration,
-            rx_packets: rx,
+            sent: tx,
+            received: rx,
+            lost: tx - rx,
             tx_packets: tx,
+            rx_packets: rx,
             frameloss_pct,
+            duration: trial_duration,
         };
         results.push(trial);
 

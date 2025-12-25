@@ -1,0 +1,62 @@
+# E2E test config — tester → reflector at 172.28.1.20
+test:
+  - throughput
+  - latency
+  - frame_loss
+  - back_to_back
+
+interface: eth0
+reflector_addr: "172.28.1.20"
+udp_dst: 4200
+udp_src: 4200
+
+# Frame sizes
+frame_sizes: [64, 128, 256, 512, 1024, 1518, 9000]
+jumbo: true
+
+# Throughput
+initial_rate: 100
+resolution: 0.5
+max_iter: 10
+loss_tolerance: 0.01
+
+# Timing
+duration: 30
+warmup: 2
+
+# Output
+output: json
+verbose: true
+
+# Rate limiting
+rate_type: cbr
+batch_size: 128
+num_queues: 4
+port_mode: endpoint
+tx_port: 0
+rx_port: 0
+
+# Y.1564
+y1564_cir: 0
+y1564_eir: 0
+
+# RFC 2889
+rfc2889_port_count: 1
+rfc2889_addr_count: 1
+
+# RFC 6349
+rfc6349_mss: 0
+rfc6349_rwnd: 0
+rfc6349_streams: 1
+
+# Y.1731
+y1731_mep_id: 0
+y1731_meg_level: 0
+
+# MEF
+mef_cir: 0
+mef_eir: 0
+
+# TSN
+tsn_classes: 0
+tsn_cycle_ns: 0

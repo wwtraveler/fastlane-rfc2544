@@ -1,0 +1,12 @@
+[package]
+name = "fastlane-payload"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "Packet payload generation and frame construction for fastlane-rfc2544"
+
+[dependencies]
+anyhow.workspace = true
+serde.workspace = true

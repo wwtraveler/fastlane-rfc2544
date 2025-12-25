@@ -1,0 +1,22 @@
+[package]
+name = "fastlane-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "CLI binary for fastlane-rfc2544 — high-performance RFC 2544 benchmarking"
+
+[[bin]]
+name = "fastlane"
+path = "main.rs"
+
+[dependencies]
+fastlane-core = { path = "../fastlane-core" }
+fastlane-payload = { path = "../fastlane-payload" }
+clap = { workspace = true, features = ["derive"] }
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+anyhow = { workspace = true }
+log = { workspace = true }

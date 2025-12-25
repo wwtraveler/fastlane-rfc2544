@@ -7,17 +7,20 @@ use std::collections::BTreeMap;
 use std::time::{Duration, Instant, SystemTime};
 
 use crate::config::{Config, LatencyConfig, TestType};
-use crate::results::{FrameResult, LatencyTestResult, TrialResult};
+pub use crate::results::{FrameResult, LatencyResult, LatencyTestResult, TrialResult};
 
 /// A single latency measurement sample
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LatencySample {
     pub latency_us: u64,
+    #[serde(serialize_with = "crate::results::serialize_instant", deserialize_with = "crate::results::deserialize_instant")]
     pub timestamp: Instant,
 }
 
+use serde::{Deserialize, Serialize};
+
 /// Latency histogram for statistical analysis
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct LatencyHistogram {
     pub samples: Vec<LatencySample>,
     pub frame_size: u32,
@@ -155,8 +158,16 @@ pub fn run_latency_full(
         }
     }
 
+    let result = all_histograms.first().cloned().unwrap_or(LatencyHistogram {
+        samples: vec![],
+        frame_size: 0,
+        rate_mpps: 0.0,
+        duration: Duration::from_secs(0),
+    });
     Ok(LatencyTestResult {
+        result,
         histograms: all_histograms,
+        load_level: 1.0,
         test_duration: config.trial_duration * lat_cfg.load_levels.len() as u32,
         test_type: TestType::Latency,
     })

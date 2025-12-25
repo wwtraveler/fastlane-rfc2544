@@ -14,7 +14,7 @@
 use std::time::{Duration, Instant};
 
 use crate::config::{ThroughputConfig, Config, TestType};
-use crate::results::{FrameResult, TrialResult, ThroughputTestResult};
+pub use crate::results::{FrameResult, TrialResult, ThroughputTestResult};
 
 /// Maximum trials per frame size (ByteBlower Python)
 const MAX_TRIALS_PER_FRAME: u32 = 25;

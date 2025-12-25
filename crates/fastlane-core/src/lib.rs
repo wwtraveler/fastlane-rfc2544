@@ -18,11 +18,13 @@ pub mod packet;
 pub mod results;
 pub mod pacing;
 
-pub use config::*;
-pub use throughput::*;
-pub use latency::*;
-pub use frameloss::*;
-pub use back2back::*;
+// Explicit imports to avoid glob re-export conflicts
+pub use config::RateType;
+pub use results::{ThroughputResult, LatencyResult};
+pub use throughput::{ThroughputTestResult, TrialResult};
+pub use latency::LatencyTestResult;
+pub use frameloss::{FrameLossResult, FrameLossTestResult, FrameLossTrial};
+pub use back2back::{BackToBackResult, BackToBackTestResult};
 pub use packet::*;
 pub use results::*;
-pub use pacing::*;
+pub use pacing::Pacer;

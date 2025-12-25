@@ -12,13 +12,9 @@ description = "Core RFC 2544 test engine — throughput, latency, frame loss, ba
 [dependencies]
 fastlane-payload = { path = "../fastlane-payload" }
 clap = { workspace = true }
-serde = { workspace = true }
+serde = { workspace = true, features = ["std"] }
 serde_json = { workspace = true }
 serde_yaml = { workspace = true }
 log = { workspace = true }
 anyhow = { workspace = true }
 thiserror = { workspace = true }
-
-[[bin]]
-name = "fastlane-core-lib"
-path = "src/lib.rs"

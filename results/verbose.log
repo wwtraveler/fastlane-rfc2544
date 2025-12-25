@@ -1,0 +1,11 @@
+fastlane RFC 2544 Benchmark Tool
+Interface: eth0
+Test: ["throughput,latency"]
+Frame sizes: []
+Output: json
+Jumbo: false
+Rate type: cbr
+Queues: 4
+Verbose mode enabled
+Duration: 30s, Warmup: 2s
+Resolution: 0.5, Loss tolerance: 0.01

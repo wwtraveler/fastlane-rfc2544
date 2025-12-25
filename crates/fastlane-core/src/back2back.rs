@@ -6,7 +6,7 @@
 use std::time::Duration;
 
 use crate::config::{BackToBackConfig, Config, TestType};
-use crate::results::{BackToBackResult, BackToBackTestResult, TrialResult};
+pub use crate::results::{BackToBackResult, BackToBackTestResult, TrialResult};
 
 /// Run back-to-back test at a single frame size
 pub fn run_back2back_trial(
@@ -55,8 +55,11 @@ pub fn run_back2back_trial(
         }
     }
 
+    let burst_us = (max_burst as f64 / line_rate_pps) * 1_000_000.0;
     Ok(BackToBackResult {
         frame_size,
+        burst_size: max_burst,
+        burst_us,
         max_burst,
         line_rate_pps,
         trials: vec![TrialResult {
@@ -84,9 +87,23 @@ pub fn run_back2back_full(
         all_results.push(result);
     }
 
+    let threshold = all_results.last().map(|r| r.burst_us).unwrap_or(0.0);
+    let result = all_results.last().cloned().unwrap_or(BackToBackResult {
+        frame_size: 0,
+        burst_size: 0,
+        burst_us: 0.0,
+        max_burst: 0,
+        line_rate_pps: 0.0,
+        trials: vec![],
+        test_duration: config.trial_duration,
+        test_type: TestType::BackToBack,
+    });
     Ok(BackToBackTestResult {
+        result,
+        threshold,
         results: all_results,
         test_duration: config.trial_duration * frame_sizes.len() as u32,
+        test_type: TestType::BackToBack,
     })
 }
 
